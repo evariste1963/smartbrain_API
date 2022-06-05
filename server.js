@@ -1,8 +1,8 @@
 import express from "express";
-import { json } from "express/lib/response";
+//import {json} from "express/lib/response" //not sure where this coam from --> delete
 
 const app = express();
-//app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 const database = {
@@ -60,11 +60,11 @@ app.get("/profile/:id", (req, res) => {
   database.users.forEach((user) => {
     if (user.id === id) {
       found = true;
-      return json(user);
+      return res.json(user);
     }
   });
   if (!found) {
-    res.status(400).json("profile not found");
+    res.status(404).json("profile not found");
   }
 });
 
