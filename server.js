@@ -5,6 +5,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const port = 3000;
 const database = {
   users: [
     {
@@ -85,6 +86,6 @@ app.put("/image", (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("app is running on port 3000");
+app.listen(port, () => {
+  console.log(`app is running on port ${port}`);
 });
