@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt-nodejs";
 //import { json } from "express/lib/response"; //not sure where this coam from --> delete
 
 const app = express();
