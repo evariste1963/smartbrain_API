@@ -1,5 +1,5 @@
 import express from "express";
-//import {json} from "express/lib/response" //not sure where this coam from --> delete
+//import { json } from "express/lib/response"; //not sure where this coam from --> delete
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -46,7 +46,7 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   database.users.push({
-    id: "125",
+    id: "126",
     name: name,
     email: email,
     password: password,
