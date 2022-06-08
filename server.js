@@ -47,7 +47,7 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   database.users.push({
-    id: "126",
+    id: +database.users.at(-1).id + 1,
     name: name,
     email: email,
     password: password,
