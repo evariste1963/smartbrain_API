@@ -40,7 +40,7 @@ app.post("/signin", (req, res) => {
   database.users.forEach(user => {
     if (user.email === email && user.password === password) {
       found = true;
-      return res.json("success!");
+      res.json("success!");
     }
   });
   if (!found) res.status(400).json("error loggin in");
