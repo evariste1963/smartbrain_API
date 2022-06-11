@@ -1,10 +1,12 @@
 import express from "express";
 import bcrypt from "bcrypt-nodejs";
+import cors from "cors";
 //import { json } from "express/lib/response"; //not sure where this coam from --> delete
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 
 const port = 3000;
 const database = {
