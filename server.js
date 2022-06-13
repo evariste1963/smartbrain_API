@@ -42,7 +42,6 @@ app.post("/signin", (req, res) => {
   database.users.forEach(user => {
     if (user.email === email && user.password === password) {
       found = true;
-      //res.json(database.users[0]);
       database.users.forEach(user => {
         if (user.email === email) {
           found = true;
