@@ -59,7 +59,7 @@ app.post("/register", (req, res) => {
     id: (+database.users.at(-1).id + 1).toString(),
     name: name,
     email: email,
-    password: password,
+    password: password, //don't ever send this -- password
     entries: 0,
     joined: new Date(),
   });
