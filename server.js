@@ -2,6 +2,20 @@ import express from "express";
 import bcrypt from "bcrypt-nodejs";
 import cors from "cors";
 //import { json } from "express/lib/response"; //not sure where this coam from --> delete
+import knex from "knex";
+
+const postgres = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    port: 5432, //3306,
+    user: "postgres",
+    password: 123,
+    database: "smart-brain",
+  },
+});
+
+console.log(postgres.select("*").from("users"));
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
