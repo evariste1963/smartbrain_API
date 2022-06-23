@@ -10,12 +10,17 @@ const postgres = knex({
     host: "127.0.0.1",
     port: 5432, //3306,
     user: "postgres",
-    password: 123,
+    password: "123",
     database: "smart-brain",
   },
 });
 
-console.log(postgres.select("*").from("users"));
+postgres
+  .select("*")
+  .from("users")
+  .then((data) => {
+    console.log(data);
+  });
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
