@@ -21,24 +21,28 @@ postgres
   .then(data => {
     console.log(data);
   });
-
-/* //alternative without knex *******
+/*
+//alternative without knex *******
 import pg from "pg";
-
 const conString = "postgres://postgres:123@localhost:5432/smart-brain";
+
 const client = new pg.Client(conString);
 
-const dbrun = async () => {
+(async function () {
   await client.connect();
-  const res = await client.query("SELECT * FROM users");
-  res.rows.forEach(row => {
-    console.log(row);
+  await client.query("SELECT * FROM users", (err, res) => {
+    if (!err) {
+      res.rows.forEach(row => {
+        console.log(row);
+      });
+    } else {
+      console.log("Query failed! - " + err.message);
+    }
+    console.log("success!");
+    client.end();
   });
-  await client.end();
-};
-dbrun();
+})();
 */
-
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
