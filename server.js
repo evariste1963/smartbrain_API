@@ -4,7 +4,7 @@ import cors from "cors";
 //import { json } from "express/lib/response"; //not sure where this coam from --> delete
 import knex from "knex";
 
-const postgres = knex({
+const db = knex({
   client: "pg",
   connection: {
     host: "127.0.0.1",
@@ -15,12 +15,11 @@ const postgres = knex({
   },
 });
 
-postgres
-  .select("*")
-  .from("users")
-  .then(data => {
-    console.log(data);
-  });
+// db.select("*")
+//   .from("users")
+//   .then((data) => {
+//     console.log(data);
+//   });
 /*
 //alternative without knex *******
 import pg from "pg";
@@ -79,10 +78,10 @@ app.get("/", (req, res) => {
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
   let found = false;
-  database.users.forEach(user => {
+  database.users.forEach((user) => {
     if (user.email === email && user.password === password) {
       found = true;
-      database.users.forEach(user => {
+      database.users.forEach((user) => {
         if (user.email === email) {
           found = true;
           res.json(user);
@@ -95,21 +94,25 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
-  database.users.push({
-    id: (+database.users.at(-1).id + 1).toString(),
-    name: name,
-    email: email,
-    password: password, //don't ever send this -- password
-    entries: 0,
-    joined: new Date(),
-  });
-  res.json(database.users.at(-1)); // same as database.users[database.users.length-1]
+  db("users")
+    .returning("*")
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date(),
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => {
+      res.status(400).json("e-mail already registered");
+    });
 });
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
   let found = false;
-  database.users.forEach(user => {
+  database.users.forEach((user) => {
     if (user.id === id) {
       found = true;
       res.json(user);
@@ -123,7 +126,7 @@ app.get("/profile/:id", (req, res) => {
 app.put("/image", (req, res) => {
   const { id } = req.body;
   let found = false;
-  database.users.forEach(user => {
+  database.users.forEach((user) => {
     if (user.id === id) {
       found = true;
       user.entries++;
