@@ -8,7 +8,7 @@ const postgres = knex({
   client: "pg",
   connection: {
     host: "127.0.0.1",
-    port: 5432, //3306,
+    port: 5432,
     user: "postgres",
     password: "123",
     database: "smart-brain",
@@ -18,9 +18,26 @@ const postgres = knex({
 postgres
   .select("*")
   .from("users")
-  .then((data) => {
+  .then(data => {
     console.log(data);
   });
+
+/* //alternative without knex *******
+import pg from "pg";
+
+const conString = "postgres://postgres:123@localhost:5432/smart-brain";
+const client = new pg.Client(conString);
+
+const dbrun = async () => {
+  await client.connect();
+  const res = await client.query("SELECT * FROM users");
+  res.rows.forEach(row => {
+    console.log(row);
+  });
+  await client.end();
+};
+dbrun();
+*/
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -58,10 +75,10 @@ app.get("/", (req, res) => {
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
   let found = false;
-  database.users.forEach((user) => {
+  database.users.forEach(user => {
     if (user.email === email && user.password === password) {
       found = true;
-      database.users.forEach((user) => {
+      database.users.forEach(user => {
         if (user.email === email) {
           found = true;
           res.json(user);
@@ -88,7 +105,7 @@ app.post("/register", (req, res) => {
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
   let found = false;
-  database.users.forEach((user) => {
+  database.users.forEach(user => {
     if (user.id === id) {
       found = true;
       res.json(user);
@@ -102,7 +119,7 @@ app.get("/profile/:id", (req, res) => {
 app.put("/image", (req, res) => {
   const { id } = req.body;
   let found = false;
-  database.users.forEach((user) => {
+  database.users.forEach(user => {
     if (user.id === id) {
       found = true;
       user.entries++;
