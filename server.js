@@ -78,10 +78,10 @@ app.get("/", (req, res) => {
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
   let found = false;
-  database.users.forEach((user) => {
+  database.users.forEach(user => {
     if (user.email === email && user.password === password) {
       found = true;
-      database.users.forEach((user) => {
+      database.users.forEach(user => {
         if (user.email === email) {
           found = true;
           res.json(user);
@@ -101,41 +101,40 @@ app.post("/register", (req, res) => {
       name: name,
       joined: new Date(),
     })
-    .then((user) => {
+    .then(user => {
       res.json(user[0]);
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(400).json("e-mail already registered");
     });
 });
 
+//not currently used in App
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      res.json(user);
-    }
-  });
-  if (!found) {
-    res.status(404).json("profile not found");
-  }
+  db.select("*")
+    .from("users")
+    .where({ id })
+    .then(user => {
+      if (user.length) {
+        res.json(user[0]);
+      } else {
+        res.status(400).json("user not found");
+      }
+    })
+    .catch(err => res.status(404).json("error fetching user"));
 });
 
 app.put("/image", (req, res) => {
   const { id } = req.body;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      user.entries++;
-      res.json(user.entries);
-    }
-  });
-  if (!found) {
-    res.status(404).json("profile not found");
-  }
+  db("users")
+    .where("id", "=", id)
+    .increment("entries", 1)
+    .returning("entries")
+    .then(entries => {
+      res.json(entries[0].entries);
+    })
+    .catch(err => res.status(400).json("unable to fetch entries"));
 });
 
 app.listen(port, () => {
