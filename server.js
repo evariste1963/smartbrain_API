@@ -48,26 +48,6 @@ app.use(express.json());
 app.use(cors());
 
 const port = 3000;
-const database = {
-  users: [
-    {
-      id: "123",
-      name: "john",
-      email: "john@email.com",
-      password: "spud",
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: "124",
-      name: "sally",
-      email: "sally@email.com",
-      password: "peas",
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-};
 
 //ROUTES
 
