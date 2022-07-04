@@ -59,28 +59,28 @@ app.post("/signin", (req, res) => {
   db.select("email", "hash")
     .from("login")
     .where("email", "=", req.body.email)
-    .then((data) => {
+    .then(data => {
       const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
       if (isValid) {
         return db
           .select("*")
           .from("users")
           .where("email", "=", req.body.email)
-          .then((user) => {
+          .then(user => {
             res.json(user[0]);
           })
-          .catch((err) => res.status(400).json("unable to get user"));
+          .catch(err => res.status(400).json("unable to get user"));
       } else {
         res.status(400).json("wrong credentials");
       }
     })
-    .catch((err) => res.status(400).json("wrog credentials"));
+    .catch(err => res.status(400).json("wrong credentials"));
 });
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   const hash = bcrypt.hashSync(password);
-  db.transaction((trx) => {
+  db.transaction(trx => {
     trx
       .insert({
         hash: hash,
@@ -88,7 +88,7 @@ app.post("/register", (req, res) => {
       })
       .into("login")
       .returning("email")
-      .then((loginEmail) => {
+      .then(loginEmail => {
         return trx("users")
           .returning("*")
           .insert({
@@ -96,13 +96,13 @@ app.post("/register", (req, res) => {
             name: name,
             joined: new Date(),
           })
-          .then((user) => {
+          .then(user => {
             res.json(user[0]);
           });
       })
       .then(trx.commit)
       .catch(trx.rollback);
-  }).catch((err) => {
+  }).catch(err => {
     res.status(400).json("unable to register");
   });
 });
@@ -113,14 +113,14 @@ app.get("/profile/:id", (req, res) => {
   db.select("*")
     .from("users")
     .where({ id })
-    .then((user) => {
+    .then(user => {
       if (user.length) {
         res.json(user[0]);
       } else {
         res.status(400).json("user not found");
       }
     })
-    .catch((err) => res.status(404).json("error fetching user"));
+    .catch(err => res.status(404).json("error fetching user"));
 });
 
 app.put("/image", (req, res) => {
@@ -129,10 +129,10 @@ app.put("/image", (req, res) => {
     .where("id", "=", id)
     .increment("entries", 1)
     .returning("entries")
-    .then((entries) => {
+    .then(entries => {
       res.json(entries[0].entries);
     })
-    .catch((err) => res.status(400).json("unable to fetch entries"));
+    .catch(err => res.status(400).json("unable to fetch entries"));
 });
 
 app.listen(port, () => {
