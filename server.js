@@ -5,7 +5,7 @@ import cors from "cors";
 import knex from "knex";
 import { handleSignin } from "./controllers/signin.js";
 import { handleRegister } from "./controllers/register.js";
-import { handleImage } from "./controllers/image.js";
+import { handleImage, handleApiCall } from "./controllers/image.js";
 import { handleProfileGet } from "./controllers/profile.js";
 
 const db = knex({
@@ -65,6 +65,7 @@ app.post("/register", (req, res) => handleRegister(req, res, db, bcrypt));
 //not currently used in App
 app.get("/profile/:id", (req, res) => handleProfileGet(req, res, db));
 app.put("/image", (req, res) => handleImage(req, res, db));
+app.post("/imageUrl", (req, res) => handleApiCall(req, res));
 
 app.listen(port, () => {
   console.log(`app is running on port ${port}`);
