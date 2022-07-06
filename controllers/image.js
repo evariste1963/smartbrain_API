@@ -1,12 +1,11 @@
-const handleImage = (req, res, db) => {
+export const handleImage = (req, res, db) => {
   const { id } = req.body;
   db("users")
     .where("id", "=", id)
     .increment("entries", 1)
     .returning("entries")
-    .then((entries) => {
+    .then(entries => {
       res.json(entries[0].entries);
     })
-    .catch((err) => res.status(400).json("unable to fetch entries"));
+    .catch(err => res.status(400).json("unable to fetch entries"));
 };
-export { handleImage };
